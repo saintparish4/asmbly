@@ -1,0 +1,24 @@
+{
+    "targets": [
+        {
+            "url": "https://www.cloudfare.com",
+            "interval": 60,
+            "timeout": 5000
+        },
+        {
+            "url": "https://www.facebook.com",
+            "interval": 60,
+            "timeout": 5000
+        },
+        {
+            "url": "https://www.google.com",
+            "interval": 60,
+            "timeout": 5000
+        },
+        {
+            "url": "https://www.twitter.com",
+            "interval": 60,
+            "timeout": 5000
+        }
+    ]
+}
