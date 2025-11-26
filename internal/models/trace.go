@@ -47,9 +47,9 @@ type Span struct {
 
 // Trace represents a complete trace containing multiple spans.
 type Trace struct {
-	TraceID   string    `json:"trace_id"`
-	Spans     []Span    `json:"spans"`
-	StartTime time.Time `json:"start_time"`
+	TraceID   string        `json:"trace_id"`
+	Spans     []Span        `json:"spans"`
+	StartTime time.Time     `json:"start_time"`
 	Duration  time.Duration `json:"duration"`
 
 	// Services involved in this trace
@@ -65,9 +65,9 @@ type Trace struct {
 
 // Common validation errors
 var (
-	ErrMissingTraceID      = errors.New("trace_id is required")
-	ErrMissingSpanID       = errors.New("span_id is required")
-	ErrMissingServiceName  = errors.New("service_name is required")
+	ErrMissingTraceID       = errors.New("trace_id is required")
+	ErrMissingSpanID        = errors.New("span_id is required")
+	ErrMissingServiceName   = errors.New("service_name is required")
 	ErrMissingOperationName = errors.New("operation_name is required")
 	ErrInvalidTraceIDFormat = errors.New("trace_id must be 32 hex characters")
 	ErrInvalidSpanIDFormat  = errors.New("span_id must be 16 hex characters")

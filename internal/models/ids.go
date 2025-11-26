@@ -7,7 +7,7 @@ import (
 
 // GenerateTraceID creates a cryptographically random 128-bit trace ID.
 // Returns a 32-character lowercase hex string (e.g., "a1b2c3d4e5f6...").
-// 
+//
 // This uses crypto/rand for true randomness suitable for distributed systems,
 // ensuring trace IDs are globally unique across all services.
 func GenerateTraceID() string {
