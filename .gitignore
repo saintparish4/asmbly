@@ -38,6 +38,10 @@ vendor/
 tmp/
 temp/
 
+# Profiling data
+profiles/
+*.prof
+
 # Database files (if using BadgerDB later)
 data/
 *.db

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	_ "net/http/pprof" // Enable pprof endpoints
 	"os"
 	"os/signal"
 	"syscall"
@@ -103,6 +104,17 @@ func main() {
 		IdleTimeout:  120 * time.Second,
 	}
 
+	// Start pprof server on port 6060 (for profiling)
+	pprofServer := &http.Server{
+		Addr:    ":6060",
+		Handler: http.DefaultServeMux, // pprof registers with DefaultServeMux
+	}
+	pprofErrors := make(chan error, 1)
+	go func() {
+		logger.Info("pprof server listening", "addr", ":6060")
+		pprofErrors <- pprofServer.ListenAndServe()
+	}()
+
 	// Start server in goroutine
 	serverErrors := make(chan error, 1)
 	go func() {
@@ -118,6 +130,9 @@ func main() {
 	case err := <-serverErrors:
 		logger.Error("server error", "error", err)
 		os.Exit(1)
+	case err := <-pprofErrors:
+		logger.Error("pprof server error", "error", err)
+		os.Exit(1)
 
 	case sig := <-shutdown:
 		logger.Info("shutdown signal received", "signal", sig)
@@ -125,6 +140,12 @@ func main() {
 		// Graceful shutdown with timeout
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
+
+		// Stop pprof server
+		if err := pprofServer.Shutdown(ctx); err != nil {
+			logger.Error("pprof server shutdown error", "error", err)
+			pprofServer.Close()
+		}
 
 		// Stop accepting new requests
 		if err := server.Shutdown(ctx); err != nil {

@@ -1,4 +1,4 @@
-.PHONY: all build test bench run clean fmt lint help
+.PHONY: all build test bench run clean fmt lint help validate profile
 
 # Default target
 all: fmt lint test build
@@ -57,14 +57,22 @@ run-dev:
 # Test the collector manually (requires collector to be running)
 test-collector:
 	@echo "Running manual collector tests..."
-	@chmod +x ./scripts/test-collector.sh
 	@./scripts/test-collector.sh
+
+# Run comprehensive validation (100 spans, all features)
+validate:
+	@echo "Running comprehensive validation..."
+	@./scripts/validate-all.sh
+
+# Profile memory usage
+profile:
+	@echo "Profiling memory usage..."
+	@./scripts/profile-memory.sh
 
 # Run load tests (requires collector to be running)
 # Installs 'hey' tool automatically, falls back to curl if installation fails
 load-test:
 	@echo "Running load tests..."
-	@chmod +x ./scripts/load-test.sh
 	@./scripts/load-test.sh
 
 # Clean build artifacts
@@ -99,9 +107,6 @@ help:
 	@echo "  make test-coverage  Run tests and generate coverage report"
 	@echo "  make bench          Run benchmarks"
 	@echo "  make run            Start the collector service"
-	@echo "  make run-dev        Start collector in development mode"
-	@echo "  make test-collector Run manual collector tests (requires running collector)"
-	@echo "  make load-test      Run load tests (requires running collector)"
 	@echo "  make clean          Remove build artifacts"
 	@echo "  make fmt            Format all Go code"
 	@echo "  make lint           Run golangci-lint"
